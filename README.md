@@ -1,10 +1,10 @@
 # LST001 - Basic Token Interface v0.1 (under-revision)
 
 ## Goal
-This standard will descibe the variables and methods needed to create a basic token on the Lamden Blockchain.  Adhearance to this standard ensures highest possible compatability for your token.
+This standard will describe the variables and methods needed to create a basic token on the Lamden Blockchain.  Adherence to this standard ensures highest possible compatibility for your token.
 
 ## Changes
-Discusion on finializing this standard is taking place in the [Github Discussions](https://github.com/Lamden-Standards/LST001/discussions/2).  Anyone is welcome to join and comment.
+Discussion on finalizing this standard is taking place in the [Github Discussions](https://github.com/Lamden-Standards/LST001/discussions/2); With a current deadline of March 2nd, 2021. Anyone is welcome to join and comment. 
 
 ## Imports
 - `none`
@@ -12,12 +12,12 @@ Discusion on finializing this standard is taking place in the [Github Discussion
 ## Variables
 
 ### **balances**
-This variable holds the main account balances in the contract  `balances[account]`.
+This variable holds the main account balances for the contract  `balances[account]`.
 It also uses a multi-hash to store allowances `balances[owner, spender]`.
 
 - Type: `Hash`
     - default value: `0`
-- Requied: `True`
+- Required: `True`
 
 ``` python
 balances = Hash(default_value=0)
@@ -26,14 +26,14 @@ balances = Hash(default_value=0)
 ## Methods
 
 ### **seed**
-This is the constructor method for the token used to mint an initial supply.
+This is the constructor method for smart contract. We will user it to mint an initial token supply.
 
 - Decorator: @construct
 - Public: `False` 
 - arguments:
     - `vk`
         - type: `string`
-        - description: The account provided will be minted the inital supply of tokens.
+        - description: The account provided will be minted the initial supply of tokens.
 - state changes: `1`
 - assertions: `none`
 - return: `void`
@@ -45,7 +45,9 @@ def seed(vk: str):
 ```
 
 ### **transfer**
-This is the constructor method for the token used to mint an initial supply.
+This is the main transfer method for the token. 
+This should only be called if the `caller` is sending their tokens directly.
+To send tokens on behalf of another account use the `transfer_from` method.
 
 - Decorator: `@export`
 - Public: `True` 
@@ -77,9 +79,7 @@ def transfer(amount: float, to: str):
 ```
 
 ### **balance_of**
-** Currenty in review to see if we need this in a "basic" token **
-- This would never be called directly from a blockchain transaction
-- This is mainly used for contracts that import this token, but they can access the balances hash directly using foreign keys
+**[Currently in review (REV_01)](https://github.com/Lamden-Standards/LST001/discussions/2)**
 
 This function will return the current balance of an account.
 
@@ -100,9 +100,7 @@ def balance_of(account: str):
 ```
 
 ### **allowance**
-** Currenty in review to see if we need this in a "basic" token **
-- This would never be called directly from a blockchain transaction
-- This is mainly used for contracts that import this token, but they can access the balances hash directly using foreign keys
+**[Currently in review (REV_02)](https://github.com/Lamden-Standards/LST001/discussions/2)**
 
 This method will return the amount that has been approved for one account to spend on behalf of another.
 
@@ -127,8 +125,7 @@ def allowance(owner: str, spender: str):
 
 
 ### **approve**
-** Currenty in review: **
-- Does this need to return the approval amount?
+**[Currently in review (REV_03)](https://github.com/Lamden-Standards/LST001/discussions/2)**
 
 This method will return add to the approval balance of the caller's account for the `to` address provided.
 
@@ -158,7 +155,9 @@ def approve(amount: float, to: str):
 ```
 
 ### **transfer_from**
-This method will allow a caller to spend tokens from another account. For this to work a prior call to `approve` is needed by the `main_account`  to set an `allowance` for the caller. Failure to set an allowance beforehand will cause the method to error.
+This method will allow a caller to spend tokens from another account. 
+For this to work a prior call to `approve` is needed by the `main_account`  to set an `allowance` for the caller. 
+Failure to set an allowance beforehand will cause the method to error.
 
 - Decorator: `@export`
 - Public: `True` 
