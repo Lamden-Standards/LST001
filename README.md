@@ -26,7 +26,7 @@ balances = Hash(default_value=0)
 ## Methods
 
 ### **seed**
-This is the constructor method for smart contract. We will user it to mint an initial token supply.
+This is the constructor method for smart contract. We will use it to mint an initial token supply.
 
 - Decorator: @construct
 - Public: `False` 
