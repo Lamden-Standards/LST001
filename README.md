@@ -1,4 +1,4 @@
-# LST001 - Basic Token Interface v0.1 (under-revision)
+# LST001 - Basic Token Interface v1.0 (approved)
 
 ## Goal
 This standard will describe the variables and methods needed to create a basic token on the Lamden Blockchain.  Adherence to this standard ensures highest possible compatibility for your token.
@@ -28,7 +28,10 @@ balances = Hash(default_value=0)
 ### **seed**
 This is the constructor method for smart contract. We will use it to mint an initial token supply.
 
+This method is `not required`. The below example is included to show how you might mint an initial supply to an account.
+
 - Decorator: @construct
+- Required: `False`
 - Public: `False` 
 - arguments:
     - `vk`
@@ -78,55 +81,7 @@ def transfer(amount: float, to: str):
     balances[to] += amount
 ```
 
-### **balance_of**
-**[Currently in review (REV_01)](https://github.com/Lamden-Standards/LST001/discussions/2)**
-
-This function will return the current balance of an account.
-
-- Decorator: `@export`
-- Public: `True` 
-- arguments:
-    - `account`
-        - type: `string`
-        - The account to lookup the balance for
-- state changes: `1`
-- assertions: `none`
-- return: `float`
-
-``` python
-@export
-def balance_of(account: str):
-    return balances[account]
-```
-
-### **allowance**
-**[Currently in review (REV_02)](https://github.com/Lamden-Standards/LST001/discussions/2)**
-
-This method will return the amount that has been approved for one account to spend on behalf of another.
-
-- Decorator: `@export`
-- Public: `True` 
-- arguments:
-    - `owner`
-        - type: `string`
-        - The account account owner
-    - `spender`
-        - type: `string`
-        - The account to lookup the allowance for
-- state changes: `1`
-- assertions: `none`
-- return: `float`
-
-``` python
-@export
-def allowance(owner: str, spender: str):
-    return balances[owner, spender]
-```
-
-
 ### **approve**
-**[Currently in review (REV_03)](https://github.com/Lamden-Standards/LST001/discussions/2)**
-
 This method will return add to the approval balance of the caller's account for the `to` address provided.
 
 - Decorator: `@export`
@@ -142,7 +97,7 @@ This method will return add to the approval balance of the caller's account for 
 - assertions: 
     - `amount` must be greater-than 0
         - error: `Cannot send negative balances!`
-- return: `float`
+- return: `void`
 
 ``` python
 @export
@@ -151,7 +106,6 @@ def approve(amount: float, to: str):
 
     # Add the amount to the callers
     balances[ctx.caller, to] += amount
-    return balances[ctx.caller, to]
 ```
 
 ### **transfer_from**

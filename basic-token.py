@@ -1,7 +1,7 @@
 # required, holds all account balances and allowances
 balances = Hash(default_value=0)
 
-# required for minting an initial supply
+# Optional: for minting an initial supply to an account
 @construct
 def seed(vk: str):
     balances[vk] = 1_000_000 # change this value to alter the inital token supply
@@ -18,18 +18,6 @@ def transfer(amount: float, to: str):
     # add amount to receivers account
     balances[to] += amount
 
-# Call to get the current balance of an account
-# Currenty in review to see if we need this in a "basic" token
-@export
-def balance_of(account: str):
-    return balances[account]
-
-# Call to get the current amount an account can spend on behalf of another
-# Currenty in review to see if we need this in a "basic" token
-@export
-def allowance(owner: str, spender: str):
-    return balances[owner, spender]
-
 # Call to allow another account the abilty to transfer an amount on your behalf
 @export
 def approve(amount: float, to: str):
@@ -37,7 +25,6 @@ def approve(amount: float, to: str):
 
     # Add the amount to the callers
     balances[ctx.caller, to] += amount
-    return balances[ctx.caller, to]
 
 # Call to spend an amount from another users account; requires prior approval by that account to you
 @export
